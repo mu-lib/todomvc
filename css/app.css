@@ -1,0 +1,7 @@
+.footer,
+.clear-completed,
+.filter-active .completed,
+.filter-completed .active,
+.todo-list > .template {
+	display: none;
+}
