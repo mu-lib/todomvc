@@ -12,7 +12,7 @@
   }
 })([
   "jquery",
-  "mu-jquery-app/compose",
+  "./compose",
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub"
 ], this, function($, compose, widget, hub) {
