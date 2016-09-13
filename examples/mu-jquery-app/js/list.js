@@ -1,10 +1,10 @@
-(function(modules, root, factory) {
+(function (modules, root, factory) {
   if (typeof define === "function" && define.amd) {
     define(modules, factory);
   } else if (typeof module === "object" && module.exports) {
     module.exports = factory.apply(root, modules.map(require));
   } else {
-    root["todos/list"] = factory.apply(root, modules.map(function(m) {
+    root["todos/list"] = factory.apply(root, modules.map(function (m) {
       return {
         "jquery": root.jQuery
       }[m = m.replace(/^\./, "todos")] || root[m];
@@ -15,13 +15,13 @@
   "./create",
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub"
-], this, function($, create, widget, hub) {
-	var enter = 13;
-	var esc = 27;
-	var storage = window.localStorage;
+], this, function ($, create, widget, hub) {
+  var enter = 13;
+  var esc = 27;
+  var storage = window.localStorage;
 
   return create(widget, hub, {
-    'on/initialize': function($event) {
+    'on/initialize': function ($event) {
       var me = this;
 
       // Get detatched `$template` for future usage
@@ -29,10 +29,10 @@
         .find('.template')
         .detach()
         .removeClass('template');
-      
+
       // Create `.template` method for generating items
-      me.template = function(title, completed) {
-        return $template 
+      me.template = function (title, completed) {
+        return $template
           .clone()
           .addClass(completed ? 'completed' : 'active')
           .find('input.toggle')
@@ -57,7 +57,7 @@
       var me = this;
 
       // Check if we should skip update
-      if(!skip) {
+      if (!skip) {
         // `empty` element and `.append` the output from `$.map(tasks)`
         me.$element
           .empty()
@@ -66,143 +66,143 @@
           }));
       }
 
-			// Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
-			storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
+      // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
+      storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
     },
 
     'hub/todos/add': function (title) {
       var me = this;
-      
+
       // Append list from `.template` to `me.$element` and trigger `sync`
       me.$element
         .append(me.template(title))
         .trigger('sync');
     },
 
-		'hub/todos/complete': function (toggle) {
+    'hub/todos/toggle': function (toggle) {
       var me = this;
 
-			me.$element
-  			// Find `.toggle`, set `checked` property to `toggle`, trigger `change` event
-				.find('.toggle')
-				.prop('checked', toggle)
-				.change()
+      me.$element
+        // Find `.toggle`, set `checked` property to `toggle`, trigger `change` event
+        .find('.toggle')
+        .prop('checked', toggle)
+        .change()
         // Trigger `sync`
         .trigger('sync');
-		},
+    },
 
-		'hub/todos/clear': function () {
-			this.$element
-  			// Find and remove `li:has(.toggle:checked)`
-				.find('li:has(.toggle:checked)')
+    'hub/todos/clear': function () {
+      this.$element
+        // Find and remove `li:has(.toggle:checked)`
+        .find('li:has(.toggle:checked)')
         .remove()
         // Backtrack and trigger `sync`
         .end()
         .trigger('sync');
-		},
+    },
 
-		'hub/todos/filter': function (filter) {
-			// Toggle CSS classes depending on `filter`
-			this.$element
-				.toggleClass('filter-completed', filter === 'completed')
-				.toggleClass('filter-active', filter === 'active');
-		},
+    'hub/todos/filter': function (filter) {
+      // Toggle CSS classes depending on `filter`
+      this.$element
+        .toggleClass('filter-completed', filter === 'completed')
+        .toggleClass('filter-active', filter === 'active');
+    },
 
-		'on/change(.toggle)': function ($event) {
-			var $target = $($event.target);
-			var toggle = $target.prop('checked');
+    'on/change(.toggle)': function ($event) {
+      var $target = $($event.target);
+      var toggle = $target.prop('checked');
 
-			// Toggle CSS classes depending on `toggle`
-			$target
-				.closest('li')
-				.toggleClass('completed', toggle)
-				.toggleClass('active', !toggle);
-
-      // Trigger `sync`
-			this.$element.trigger('sync');
-		},
-
-		'on/click(.destroy)': function ($event) {
-			// `.remove` `.closest` `li`
-			$($event.target)
-				.closest('li')
-				.remove();
+      // Toggle CSS classes depending on `toggle`
+      $target
+        .closest('li')
+        .toggleClass('completed', toggle)
+        .toggleClass('active', !toggle);
 
       // Trigger `sync`
-			this.$element.trigger('sync');
-		},
+      this.$element.trigger('sync');
+    },
 
-		'on/dblclick(label)': function ($event) {
-			var $target = $($event.target);
+    'on/click(.destroy)': function ($event) {
+      // `.remove` `.closest` `li`
+      $($event.target)
+        .closest('li')
+        .remove();
 
-			$target
-				// Add class `editing` to `.closest` `li`,
-				.closest('li')
-				.addClass('editing')
-				// `.find` `.edit` and update `.val` with `$target.text()`,
-				.find('.edit')
-				.val($target.text())
-				// `.focus` to trigger event
-				.focus();
-		},
+      // Trigger `sync`
+      this.$element.trigger('sync');
+    },
 
-		'on/keyup(.edit)': function ($event) {
-			var $target = $($event.target);
+    'on/dblclick(label)': function ($event) {
+      var $target = $($event.target);
 
-			switch ($event.keyCode) {
-				case esc:
-					// Restore "task title" `.val` from `label`
-					$target.val(function () {
-						return $(this)
-							.closest('li')
-							.find('label')
-							.text();
-					});
-				// falls through
+      $target
+        // Add class `editing` to `.closest` `li`,
+        .closest('li')
+        .addClass('editing')
+        // `.find` `.edit` and update `.val` with `$target.text()`,
+        .find('.edit')
+        .val($target.text())
+        // `.focus` to trigger event
+        .focus();
+    },
 
-				case enter:
-					// Trigger `focusout` event
-					$target.focusout();
-					break;
-			}
-		},
+    'on/keyup(.edit)': function ($event) {
+      var $target = $($event.target);
 
-		'on/focusout(.edit)': function ($event) {
-			// Remove class `editing` from `.closest` `li`
-			$($event.target)
-				.closest('li')
-				.removeClass('editing');
-		},
+      switch ($event.keyCode) {
+        case esc:
+          // Restore "task title" `.val` from `label`
+          $target.val(function () {
+            return $(this)
+              .closest('li')
+              .find('label')
+              .text();
+          });
+        // falls through
 
-		'on/change(.edit)': function ($event) {
-			var $target = $($event.target);
-			// Get and `.trim` `.val`
-			var title = $target
-				.val()
-				.trim();
+        case enter:
+          // Trigger `focusout` event
+          $target.focusout();
+          break;
+      }
+    },
 
-			// If `title` is _not_ empty ...
-			if (title !== '') {
-				// Update `val` with trimmed `title`, update `.closest` `li` descendant `label` `.text` with `title`
-				$target
-					.val(title)
-					.closest('li')
-					.find('label')
-					.text(title);
+    'on/focusout(.edit)': function ($event) {
+      // Remove class `editing` from `.closest` `li`
+      $($event.target)
+        .closest('li')
+        .removeClass('editing');
+    },
+
+    'on/change(.edit)': function ($event) {
+      var $target = $($event.target);
+      // Get and `.trim` `.val`
+      var title = $target
+        .val()
+        .trim();
+
+      // If `title` is _not_ empty ...
+      if (title !== '') {
+        // Update `val` with trimmed `title`, update `.closest` `li` descendant `label` `.text` with `title`
+        $target
+          .val(title)
+          .closest('li')
+          .find('label')
+          .text(title);
 
         // Trigger `sync`
-				this.$element.trigger('sync');
-			// ... otherwise
-			} else {
-				// Find `.closest` `li` ascendant, `.find` `.destroy`, trigger `click`
-				$target
-					.closest('li')
-					.find('.destroy')
-					.click();
-			}
-		},
+        this.$element.trigger('sync');
+        // ... otherwise
+      } else {
+        // Find `.closest` `li` ascendant, `.find` `.destroy`, trigger `click`
+        $target
+          .closest('li')
+          .find('.destroy')
+          .click();
+      }
+    },
 
-    'on/sync': function($event, update) {
+    'on/sync': function ($event, update) {
       var me = this
       var tasks = me.$element
         // Find all `li` `.children`
