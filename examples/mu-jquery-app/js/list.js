@@ -12,15 +12,15 @@
   }
 })([
   "jquery",
-  "./compose",
+  "./create",
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub"
-], this, function($, compose, widget, hub) {
+], this, function($, create, widget, hub) {
 	var enter = 13;
 	var esc = 27;
 	var storage = window.localStorage;
 
-  return compose(widget, hub, {
+  return create(widget, hub, {
     'on/initialize': function($event) {
       var me = this;
 

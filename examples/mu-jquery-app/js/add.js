@@ -4,7 +4,7 @@
   } else if (typeof module === "object" && module.exports) {
     module.exports = factory.apply(root, modules.map(require));
   } else {
-    root["todos/hide"] = factory.apply(root, modules.map(function(m) {
+    root["todos/add"] = factory.apply(root, modules.map(function(m) {
       return {
         "jquery": root.jQuery
       }[m = m.replace(/^\./, "todos")] || root[m];
@@ -16,9 +16,23 @@
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub"
 ], this, function($, create, widget, hub) {
-	return create(widget, hub, {
-		"hub/todos/change": function (tasks) {
-			this.$element.toggle(tasks.length !== 0);
+  var enter = 13;
+
+  return create(widget, hub, {
+		"on/keyup": function ($event) {
+      var me = this;
+			var value;
+
+			if ($event.keyCode === enter) {
+				value = me.$element
+					.val()
+					.trim();
+
+				if (value !== "") {
+					me.publish("todos/add", value);
+          me.$element.val("");
+				}
+			}
 		}
 	});
 });

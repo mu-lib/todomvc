@@ -13,12 +13,12 @@
   }
 })([
   "jquery",
-	"./compose",
+	"./create",
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub",
 	"./go",
-], this, function($, compose, widget, hub, go) {
-	return compose(widget, hub, go, {
+], this, function($, create, widget, hub, go) {
+	return create(widget, hub, go, {
 		"go/\/(active|completed)?": function (filter) {
 			this.publish("todos/filter", filter);
 		},
