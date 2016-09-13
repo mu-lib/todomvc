@@ -1,5 +1,5 @@
 (function(modules, root, factory) {
-    root["todo/app"] = factory.apply(root, modules.map(function(m) {
+    root["todos/app"] = factory.apply(root, modules.map(function(m) {
         return {
             "jquery": root.jQuery
         }[m] || root[m];
