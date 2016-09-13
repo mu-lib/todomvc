@@ -13,14 +13,14 @@
   }
 })(["jquery", "director"], this, function($, Router) {
 
-  return function($element, ns, hub) {
+  return function() {
     var self = this;
     var routes = {};
 
-    $.each(this.constructor.go, function (index, go) {
+    $.each(self.constructor.go, function(index, go) {
       routes[go.route] = $.proxy(go.value, self);
     });
 
-    this.router = new Router(routes).init();
+    self.router = new Router(routes).init();
   }
 });
