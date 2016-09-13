@@ -12,7 +12,7 @@
   }
 })([
   "jquery",
-  "mu-jquery-app/compose",
+  "./compose",
   "mu-jquery-widget/widget",
   "mu-jquery-app/hub"
 ], this, function($, compose, widget, hub) {
@@ -104,8 +104,8 @@
 		'hub/todos/filter': function (filter) {
 			// Toggle CSS classes depending on `filter`
 			this.$element
-				.toggleClass('filter-completed', filter === '/completed')
-				.toggleClass('filter-active', filter === '/active');
+				.toggleClass('filter-completed', filter === 'completed')
+				.toggleClass('filter-active', filter === 'active');
 		},
 
 		'on/change(.toggle)': function ($event) {
