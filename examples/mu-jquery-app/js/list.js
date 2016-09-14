@@ -24,6 +24,9 @@
     'hub/todos/change': function (tasks, skip) {
       var me = this;
 
+      // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
+      storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
+
       // Check if we should skip update
       if (!skip) {
         // `empty` element and `.append` the output from `$.map(tasks)`
@@ -33,9 +36,6 @@
             return me.template(task.title, task.completed);
           }));
       }
-
-      // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
-      storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
     },
 
     'hub/todos/add': function (title) {
