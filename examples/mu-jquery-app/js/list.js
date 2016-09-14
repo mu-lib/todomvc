@@ -21,38 +21,6 @@
   var storage = window.localStorage;
 
   return create(widget, hub, {
-    'on/initialize': function ($event) {
-      var me = this;
-
-      // Get detatched `$template` for future usage
-      var $template = me.$element
-        .find('.template')
-        .detach()
-        .removeClass('template');
-
-      // Create `.template` method for generating items
-      me.template = function (title, completed) {
-        return $template
-          .clone()
-          .addClass(completed ? 'completed' : 'active')
-          .find('input.toggle')
-          .prop('checked', !!completed)
-          .end()
-          .find('label')
-          .text(title)
-          .end();
-      };
-
-      // Check if we have data in the DOM to start out with or if we need to read from storage
-      if (me.$element.children('li').length) {
-        me.$element.trigger('sync', true);
-      }
-      else {
-        // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
-        me.publish('todos/change', JSON.parse(storage.getItem('todos-mu-jquery-app') || []));
-      }
-    },
-
     'hub/todos/change': function (tasks, skip) {
       var me = this;
 
@@ -107,6 +75,63 @@
       this.$element
         .toggleClass('filter-completed', filter === 'completed')
         .toggleClass('filter-active', filter === 'active');
+    },
+
+    'on/initialize': function () {
+      var me = this;
+
+      // Get detatched `$template` for future usage
+      var $template = me.$element
+        .find('.template')
+        .detach()
+        .removeClass('template');
+
+      // Create `.template` method for generating items
+      me.template = function (title, completed) {
+        return $template
+          .clone()
+          .addClass(completed ? 'completed' : 'active')
+          .find('input.toggle')
+          .prop('checked', !!completed)
+          .end()
+          .find('label')
+          .text(title)
+          .end();
+      };
+
+      // Check if we have data in the DOM to start out with, if so trigger `sync` to persist
+      if (me.$element.children('li').length) {
+        me.$element.trigger('sync', true);
+      }
+      // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
+      else {
+        me.publish('todos/change', JSON.parse(storage.getItem('todos-mu-jquery-app') || []));
+      }
+    },
+
+    'on/sync': function ($event, update) {
+      var me = this
+      var tasks = me.$element
+        // Find all `li` `.children`
+        .children('li')
+        // `.map` to JSON
+        .map(function (index, task) {
+          var $task = $(task);
+
+          return {
+            title: $task
+              .find('label')
+              .text(),
+            completed: $task
+              .find('.toggle')
+              .prop('checked')
+          };
+        })
+        // Get underlying Array
+        .get();
+
+      // Publish `todos/change` with the new `tasks`
+      me.publish('todos/change', tasks, !update);
     },
 
     'on/change(.toggle)': function ($event) {
@@ -182,50 +207,23 @@
         .val()
         .trim();
 
-      // If `title` is _not_ empty ...
-      if (title !== '') {
-        // Update `val` with trimmed `title`, update `.closest` `li` descendant `label` `.text` with `title`
+      // If `title` is empty find `.closest` `li` ascendant, and `.remove`
+      if (title === '') {
+        $target
+          .closest('li')
+          .remove();
+      }
+      // Otherwise update `val` with trimmed `title`, update `.closest` `li` descendant `label` `.text` with `title`
+      else {
         $target
           .val(title)
           .closest('li')
           .find('label')
           .text(title);
-
-        // Trigger `sync`
-        this.$element.trigger('sync');
-        // ... otherwise
-      } else {
-        // Find `.closest` `li` ascendant, `.find` `.destroy`, trigger `click`
-        $target
-          .closest('li')
-          .find('.destroy')
-          .click();
       }
-    },
 
-    'on/sync': function ($event, update) {
-      var me = this
-      var tasks = me.$element
-        // Find all `li` `.children`
-        .children('li')
-        // `.map` to JSON
-        .map(function (index, task) {
-          var $task = $(task);
-
-          return {
-            title: $task
-              .find('label')
-              .text(),
-            completed: $task
-              .find('.toggle')
-              .prop('checked')
-          };
-        })
-        // Get underlying Array
-        .get();
-
-      // Publish `todos/change` with the new `tasks`
-      me.publish('todos/change', tasks, !update);
+      // Trigger `sync`
+      this.$element.trigger('sync');
     }
   });
 });
