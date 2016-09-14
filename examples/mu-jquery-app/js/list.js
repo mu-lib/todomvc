@@ -87,7 +87,8 @@
         .find('.toggle')
         .prop('checked', toggle)
         .change()
-        // Trigger `sync`
+        // Backtrack and trigger `sync`
+        .end()
         .trigger('sync');
     },
 
