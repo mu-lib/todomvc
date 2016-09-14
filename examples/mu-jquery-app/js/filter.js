@@ -18,10 +18,6 @@
   "./go",
 ], this, function ($, create, widget, hub, go) {
   return create(widget, hub, go, {
-    "go/\/(active|completed)?": function (filter) {
-      this.publish("todos/filter", filter);
-    },
-
     "hub/todos/filter": function (filter) {
       this.$element
         // Find all `a` elements with a `href` attribute staring with `#`
@@ -32,6 +28,10 @@
         .filter('[href="#/' + (filter || '') + '"]')
         // Add the `selected` to matching elements
         .addClass('selected');
+    },
+  
+    "go/\/(active|completed)?": function (filter) {
+      this.publish("todos/filter", filter);
     }
   });
 });
