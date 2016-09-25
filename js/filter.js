@@ -5,9 +5,9 @@
     module.exports = factory.apply(root, modules.map(require));
   } else {
     root["todos/filter"] = factory.apply(root, modules.map(function (m) {
-      return {
-        "jquery": root.jQuery
-      }[m = m.replace(/^\./, "todos")] || root[m];
+      return this[m] || root[m.replace(/^\./, "todos")];
+    }, {
+      "jquery": root.jQuery
     }));
   }
 })([
