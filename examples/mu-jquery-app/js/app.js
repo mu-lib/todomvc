@@ -1,9 +1,9 @@
 (function (modules, root, factory) {
   root["todos/app"] = factory.apply(root, modules.map(function (m) {
-    return {
+      return this[m] || root[m.replace(/^\./, "todos")];
+    }, {
       "jquery": root.jQuery
-    }[m] || root[m];
-  }));
+    }));
 })([
   "jquery",
   "mu-jquery-loom/jquery.weave",
