@@ -13,10 +13,9 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-widget/widget",
-  "mu-jquery-app/hub"
-], this, function ($, create, widget, hub) {
-  return create(widget, hub, {
+  "mu-jquery-app/widget"
+], this, function ($, create, widget) {
+  return create(widget, {
     'hub/todos/change': function (tasks) {
       var count = tasks
         .filter(function (task) {

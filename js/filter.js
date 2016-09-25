@@ -13,11 +13,10 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-widget/widget",
-  "mu-jquery-app/hub",
   "./go",
-], this, function ($, create, widget, hub, go) {
-  return create(widget, hub, go, {
+  "mu-jquery-app/widget"
+], this, function ($, create, go, widget) {
+  return create(widget, go, {
     "hub/todos/filter": function (filter) {
       this.$element
         // Find all `a` elements with a `href` attribute staring with `#`
