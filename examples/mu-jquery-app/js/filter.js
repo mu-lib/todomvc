@@ -12,11 +12,23 @@
   }
 })([
   "jquery",
+  "director",
   "./create",
-  "./go",
   "mu-jquery-app/widget"
-], this, function ($, create, go, widget) {
-  return create(widget, go, {
+], this, function ($, Route, create, widget) {
+
+  function routed() {
+    var self = this;
+    var routes = {};
+
+    $.each(self.constructor.go, function (index, go) {
+      routes[go.route] = $.proxy(go.value, self);
+    });
+
+    self.router = new Router(routes).init();
+  };
+
+  return create(widget, routed, {
     "hub/todos/filter": function (filter) {
       this.$element
         // Find all `a` elements with a `href` attribute staring with `#`
