@@ -16,19 +16,18 @@
   "./create",
   "mu-jquery-app/widget"
 ], this, function ($, Route, create, widget) {
+  return create(widget, {
+    "on/initialize": function () {
+      var self = this;
+      var routes = {};
 
-  function routed() {
-    var self = this;
-    var routes = {};
+      $.each(self.constructor.go, function (index, go) {
+        routes[go.route] = $.proxy(go.value, self);
+      });
 
-    $.each(self.constructor.go, function (index, go) {
-      routes[go.route] = $.proxy(go.value, self);
-    });
+      self.router = new Router(routes).init();
+    },
 
-    self.router = new Router(routes).init();
-  };
-
-  return create(widget, routed, {
     "hub/todos/filter": function (filter) {
       this.$element
         // Find all `a` elements with a `href` attribute staring with `#`
@@ -40,7 +39,7 @@
         // Add the `selected` to matching elements
         .addClass('selected');
     },
-  
+
     "go/\/(active|completed)?": function (filter) {
       this.publish("todos/filter", filter);
     }
