@@ -13,12 +13,11 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-widget/widget",
-  "mu-jquery-app/hub"
-], this, function ($, create, widget, hub) {
+  "mu-jquery-app/widget"
+], this, function ($, create, widget) {
   var enter = 13;
 
-  return create(widget, hub, {
+  return create(widget, {
     "on/keyup": function ($event) {
       var me = this;
       var value;
