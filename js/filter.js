@@ -29,6 +29,10 @@
         .addClass('selected');
     },
 
+    "go/\/(active|completed)?": function (filter) {
+      this.publish("todos/filter", filter);
+    },
+
     "on/initialize": function () {
       var self = this;
       var routes = {};
@@ -38,10 +42,6 @@
       });
 
       self.router = new Router(routes).init();
-    },
-
-    "go/\/(active|completed)?": function (filter) {
-      this.publish("todos/filter", filter);
     }
   });
 });
