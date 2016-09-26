@@ -6,24 +6,20 @@
     }));
 })([
   "jquery",
-  "mu-jquery-loom/jquery.weave",
+  "mu-jquery-loom/jquery.loom",
   "mu-jquery-hub/hub"
-], this, function (jQuery, weave, hub) {
-  var slice = Array.prototype.slice;
+], this, function (jQuery, loom, hub) {
   var self = this;
 
-  hub = hub("memory", "stopOnFalse");
+  jQuery.fn.loom = loom;
 
   function load(module) {
     return self[module];
   }
-
-  jQuery.fn.weave = function () {
-    return weave.apply(this.find("[mu-widget]"), ["mu-widget", load, hub].concat(slice.call(arguments)));
-  };
-
+  
   jQuery(function ($) {
     $(document)
+      .loom("[mu-widget]", "mu-widget", load, hub("memory", "stopOnFalse"))
       .weave()
       .fail(console.error.bind(console));
   });
