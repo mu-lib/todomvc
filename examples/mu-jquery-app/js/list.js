@@ -104,7 +104,7 @@
       }
       // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
       else {
-        me.publish('todos/change', JSON.parse(storage.getItem('todos-mu-jquery-app') || []));
+        me.publish('todos/change', JSON.parse(storage.getItem('todos-mu-jquery-app')) || []);
       }
     },
 
