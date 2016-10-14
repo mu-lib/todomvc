@@ -157,7 +157,7 @@
       this.$element.trigger('sync');
     },
 
-    'on/dblclick(label)': function ($event) {
+    'on/doubletap(label)': function ($event) {
       var $target = $($event.target);
 
       $target
