@@ -7,8 +7,8 @@
     root["todos/list"] = factory.apply(root, modules.map(function (m) {
       return this[m] || root[m.replace(/^\./, "todos")];
     }, {
-      "jquery": root.jQuery
-    }));
+        "jquery": root.jQuery
+      }));
   }
 })([
   "jquery",
@@ -50,10 +50,11 @@
       var me = this;
 
       me.$element
-        // Find `.toggle`, set `checked` property to `toggle`, trigger `change` event
+        // Find `.toggle`, set `checked` property to `toggle`
         .find('.toggle')
         .prop('checked', toggle)
-        .change()
+        // Trigger `change` event with `skip`
+        .trigger("change", true)
         // Backtrack and trigger `sync`
         .end()
         .trigger('sync');
@@ -133,7 +134,7 @@
       me.publish('todos/change', tasks, !update);
     },
 
-    'on/change(.toggle)': function ($event) {
+    'on/change(.toggle)': function ($event, skip) {
       var $target = $($event.target);
       var toggle = $target.prop('checked');
 
@@ -143,8 +144,10 @@
         .toggleClass('completed', toggle)
         .toggleClass('active', !toggle);
 
-      // Trigger `sync`
-      this.$element.trigger('sync');
+      // Trigger `sync` if not `skip`
+      if (!skip) {
+        this.$element.trigger('sync');
+      }
     },
 
     'on/click(.destroy)': function ($event) {
