@@ -28,8 +28,8 @@
           .trim();
 
         if (value !== "") {
-          me.publish("todos/add", value);
           me.$element.val("");
+          me.publish("todos/add", value);
         }
       }
     }
