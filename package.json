@@ -4,7 +4,7 @@
     "director": "^1.2.8",
     "jquery": "^3.1.1",
     "jquery.finger": "^0.1.6",
-    "mu-jquery-app": "^8.0.1",
+    "mu-jquery-app": "^9.0.2",
     "todomvc-app-css": "^2.0.0",
     "todomvc-common": "^1.0.0"
   }
