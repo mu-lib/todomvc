@@ -11,10 +11,9 @@
     }));
   }
 })([
-  "jquery",
   "./create",
   "mu-jquery-widget-hub/widget"
-], this, function ($, create, widget) {
+], this, function (create, widget) {
   var enter = 13;
 
   return create(widget, {
