@@ -14,7 +14,7 @@
   "jquery",
   "director",
   "./create",
-  "mu-jquery-app-hub/widget"
+  "mu-jquery-widget-hub/widget"
 ], this, function ($, Route, create, widget) {
   return create(widget, {
     "hub/todos/filter": function (filter) {

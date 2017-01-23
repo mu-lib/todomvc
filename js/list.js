@@ -13,7 +13,7 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-app-hub/widget"
+  "mu-jquery-widget-hub/widget"
 ], this, function ($, create, widget) {
   var enter = 13;
   var esc = 27;
