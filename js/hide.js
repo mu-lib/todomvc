@@ -11,10 +11,9 @@
     }));
   }
 })([
-  "jquery",
   "./create",
   "mu-jquery-widget-hub/widget"
-], this, function ($, create, widget) {
+], this, function (create, widget) {
   return create(widget, {
     "hub/todos/change": function (tasks) {
       this.$element.toggle(tasks.length !== 0);
