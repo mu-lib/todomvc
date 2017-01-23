@@ -13,7 +13,7 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-app-hub/widget"
+  "mu-jquery-widget-hub/widget"
 ], this, function ($, create, widget) {
   return create(widget, {
     "hub/todos/change": function (tasks) {
