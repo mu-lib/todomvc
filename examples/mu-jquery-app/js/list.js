@@ -13,13 +13,14 @@
 })([
   "jquery",
   "./create",
-  "mu-jquery-widget-hub/widget"
-], this, function ($, create, widget) {
+  "mu-jquery-widget/widget",
+  "mu-jquery-app-hub/widget"
+], this, function ($, create, widget, hub) {
   var enter = 13;
   var esc = 27;
   var storage = window.localStorage;
 
-  return create(widget, {
+  return create(widget, hub, {
     'hub/todos/change': function (tasks, skip) {
       var me = this;
 
