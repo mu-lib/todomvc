@@ -12,9 +12,10 @@
   }
 })([
   "./create",
-  "mu-jquery-widget-hub/widget"
-], this, function (create, widget) {
-  return create(widget, {
+  "mu-jquery-widget/widget",
+  "mu-jquery-app-hub/widget"
+], this, function (create, widget, hub) {
+  return create(widget, hub, {
     "hub/todos/change": function (tasks) {
       this.$element.toggle(tasks.length !== 0);
     }

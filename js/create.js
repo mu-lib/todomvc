@@ -13,7 +13,7 @@
 })([
   "mu-create/regexp",
   "mu-jquery-app/create",
-  "mu-jquery-widget-hub/hub"
+  "mu-jquery-app-hub/hub"
 ], this, function (regexp, create, hub) {
   var go = regexp(/^go\/(.+)/, function (result, data, route) {
     (result.go = result.go || []).push({
