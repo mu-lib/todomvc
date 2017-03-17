@@ -7,12 +7,12 @@
     root["todos/create"] = factory.apply(root, modules.map(function (m) {
       return this[m] || root[m.replace(/^\./, "todos")];
     }, {
-      "jquery": root.jQuery
-    }));
+        "jquery": root.jQuery
+      }));
   }
 })([
   "mu-create/regexp",
-  "mu-jquery-app/create"
+  "mu-jquery-app-hub/create"
 ], this, function (regexp, create) {
   var go = regexp(/^go\/(.+)/, function (result, data, route) {
     (result.go = result.go || []).push({

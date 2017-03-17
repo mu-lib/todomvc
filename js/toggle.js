@@ -11,11 +11,11 @@
     }));
   }
 })([
-  "jquery",
   "./create",
-  "mu-jquery-app/widget"
-], this, function ($, create, widget) {
-  return create(widget, {
+  "mu-jquery-widget/widget",
+  "mu-jquery-app-hub/widget"
+], this, function (create, widget, hub) {
+  return create(widget, hub, {
     "hub/todos/change": function (tasks) {
       this.$element.prop("checked", tasks.every(function (task) {
         return task.completed;
