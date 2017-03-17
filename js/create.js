@@ -12,9 +12,8 @@
   }
 })([
   "mu-create/regexp",
-  "mu-jquery-app/create",
-  "mu-jquery-app-hub/hub"
-], this, function (regexp, create, hub) {
+  "mu-jquery-app-hub/create"
+], this, function (regexp, create) {
   var go = regexp(/^go\/(.+)/, function (result, data, route) {
     (result.go = result.go || []).push({
       "route": route,
@@ -24,5 +23,5 @@
     return false;
   });
 
-  return create.extend(hub, go);
+  return create.extend(go);
 });
