@@ -6,16 +6,13 @@
   } else {
     root["todos/filter"] = factory.apply(root, modules.map(function (m) {
       return this[m] || root[m.replace(/^\./, "todos")];
-    }, {
-      "jquery": root.jQuery
     }));
   }
 })([
-  "jquery",
   "director",
   "./create",
   "mu-jquery-app-hub/widget"
-], this, function ($, Route, create, widget) {
+], this, function (Route, create, widget) {
   return create(widget, {
     "hub/todos/filter": function (filter) {
       this.$element
@@ -34,14 +31,15 @@
     },
 
     "on/initialize": function () {
-      var self = this;
+      var me = this;
+			var $ = me.$element.constructor;
       var routes = {};
 
-      $.each(self.constructor.go, function (index, go) {
-        routes[go.route] = $.proxy(go.value, self);
+      $.each(me.constructor.go, function (index, go) {
+        routes[go.route] = $.proxy(go.value, me);
       });
 
-      self.router = new Router(routes).init();
+      me.router = new Router(routes).init();
     }
   });
 });

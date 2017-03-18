@@ -6,9 +6,7 @@
   } else {
     root["todos/create"] = factory.apply(root, modules.map(function (m) {
       return this[m] || root[m.replace(/^\./, "todos")];
-    }, {
-        "jquery": root.jQuery
-      }));
+    }));
   }
 })([
   "mu-create/regexp",

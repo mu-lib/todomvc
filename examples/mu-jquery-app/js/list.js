@@ -6,15 +6,12 @@
   } else {
     root["todos/list"] = factory.apply(root, modules.map(function (m) {
       return this[m] || root[m.replace(/^\./, "todos")];
-    }, {
-        "jquery": root.jQuery
-      }));
+    }));
   }
 })([
-  "jquery",
   "./create",
   "mu-jquery-app-hub/widget"
-], this, function ($, create, widget) {
+], this, function (create, widget) {
   var enter = 13;
   var esc = 27;
   var storage = window.localStorage;
@@ -22,6 +19,8 @@
   return create(widget, {
     'hub/todos/change': function (tasks, skip) {
       var me = this;
+			var $element = me.$element;
+			var $ = $element.constructor;
 
       // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
       storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
@@ -29,7 +28,7 @@
       // Check if we should skip update
       if (!skip) {
         // `empty` element and `.append` the output from `$.map(tasks)`
-        me.$element
+        $element
           .empty()
           .append($.map(tasks, function (task) {
             return me.template(task.title, task.completed);
@@ -79,9 +78,10 @@
 
     'on/initialize': function () {
       var me = this;
+			var $element = me.$element;
 
       // Get detatched `$template` for future usage
-      var $template = me.$element
+      var $template = $element
         .find('.template')
         .detach()
         .removeClass('template');
@@ -100,8 +100,8 @@
       };
 
       // Check if we have data in the DOM to start out with, if so trigger `sync` to persist
-      if (me.$element.children('li').length) {
-        me.$element.trigger('sync', true);
+      if ($element.children('li').length) {
+        $element.trigger('sync', true);
       }
       // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
       else {
@@ -111,7 +111,9 @@
 
     'on/sync': function ($event, update) {
       var me = this
-      var tasks = me.$element
+			var $element = me.$element;
+			var $ = $element.constructor;
+      var tasks = $element
         // Find all `li` `.children`
         .children('li')
         // `.map` to JSON
@@ -135,6 +137,8 @@
     },
 
     'on/change(.toggle)': function ($event, skip) {
+			var $element = this.$element;
+			var $ = $element.constructor;
       var $target = $($event.target);
       var toggle = $target.prop('checked');
 
@@ -146,21 +150,25 @@
 
       // Trigger `sync` if not `skip`
       if (!skip) {
-        this.$element.trigger('sync');
+        $element.trigger('sync');
       }
     },
 
     'on/click(.destroy)': function ($event) {
+			var $element = this.$element;
+			var $ = $element.constructor;
+
       // `.remove` `.closest` `li`
       $($event.target)
         .closest('li')
         .remove();
 
       // Trigger `sync`
-      this.$element.trigger('sync');
+      $element.trigger('sync');
     },
 
     'on/doubletap(label)': function ($event) {
+			var $ = this.$element.constructor;
       var $target = $($event.target);
 
       $target
@@ -175,6 +183,7 @@
     },
 
     'on/keyup(.edit)': function ($event) {
+			var $ = this.$element.constructor;
       var $target = $($event.target);
 
       switch ($event.keyCode) {
@@ -196,6 +205,8 @@
     },
 
     'on/focusout(.edit)': function ($event) {
+			var $ = this.$element.constructor;
+
       // Remove class `editing` from `.closest` `li`
       $($event.target)
         .closest('li')
@@ -203,6 +214,8 @@
     },
 
     'on/change(.edit)': function ($event) {
+			var $element = this.$element;
+			var $ = $element.constructor;
       var $target = $($event.target);
       // Get and `.trim` `.val`
       var title = $target
@@ -225,7 +238,7 @@
       }
 
       // Trigger `sync`
-      this.$element.trigger('sync');
+      $element.trigger('sync');
     }
   });
 });
