@@ -8,22 +8,19 @@
       return this[m] || root[m.replace(/^\./, "todos")];
     }));
   }
-})([
-  "./create",
-  "mu-jquery-app-hub/widget"
-], this, function (create, widget) {
+})(["./create","mu-jquery-app-hub/widget"], this, function (create, widget) {
   var enter = 13;
   var esc = 27;
   var storage = window.localStorage;
 
   return create(widget, {
-    'hub/todos/change': function (tasks, skip) {
+    "hub/todos/change": function (tasks, skip) {
       var me = this;
 			var $element = me.$element;
 			var $ = $element.constructor;
 
       // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
-      storage.setItem('todos-mu-jquery-app', JSON.stringify(tasks));
+      storage.setItem("todos-mu-jquery-app", JSON.stringify(tasks));
 
       // Check if we should skip update
       if (!skip) {
@@ -36,153 +33,153 @@
       }
     },
 
-    'hub/todos/add': function (title) {
+    "hub/todos/add": function (title) {
       var me = this;
 
       // Append list from `.template` to `me.$element` and trigger `sync`
       me.$element
         .append(me.template(title))
-        .trigger('sync');
+        .trigger("sync");
     },
 
-    'hub/todos/toggle': function (toggle) {
+    "hub/todos/toggle": function (toggle) {
       var me = this;
 
       me.$element
         // Find `.toggle`, set `checked` property to `toggle`
-        .find('.toggle')
-        .prop('checked', toggle)
+        .find(".toggle")
+        .prop("checked", toggle)
         // Trigger `change` event with `skip`
         .trigger("change", true)
         // Backtrack and trigger `sync`
         .end()
-        .trigger('sync');
+        .trigger("sync");
     },
 
-    'hub/todos/clear': function () {
+    "hub/todos/clear": function () {
       this.$element
         // Find and remove `li:has(.toggle:checked)`
-        .find('li:has(.toggle:checked)')
+        .find("li:has(.toggle:checked)")
         .remove()
         // Backtrack and trigger `sync`
         .end()
-        .trigger('sync');
+        .trigger("sync");
     },
 
-    'hub/todos/filter': function (filter) {
+    "hub/todos/filter": function (filter) {
       // Toggle CSS classes depending on `filter`
       this.$element
-        .toggleClass('filter-completed', filter === 'completed')
-        .toggleClass('filter-active', filter === 'active');
+        .toggleClass("filter-completed", filter === "completed")
+        .toggleClass("filter-active", filter === "active");
     },
 
-    'on/initialize': function () {
+    "on/initialize": function () {
       var me = this;
 			var $element = me.$element;
 
       // Get detatched `$template` for future usage
       var $template = $element
-        .find('.template')
+        .find(".template")
         .detach()
-        .removeClass('template');
+        .removeClass("template");
 
       // Create `.template` method for generating items
       me.template = function (title, completed) {
         return $template
           .clone()
-          .addClass(completed ? 'completed' : 'active')
-          .find('input.toggle')
-          .prop('checked', !!completed)
+          .addClass(completed ? "completed" : "active")
+          .find("input.toggle")
+          .prop("checked", !!completed)
           .end()
-          .find('label')
+          .find("label")
           .text(title)
           .end();
       };
 
       // Check if we have data in the DOM to start out with, if so trigger `sync` to persist
-      if ($element.children('li').length) {
-        $element.trigger('sync', true);
+      if ($element.children("li").length) {
+        $element.trigger("sync", true);
       }
       // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
       else {
-        me.publish('todos/change', JSON.parse(storage.getItem('todos-mu-jquery-app')) || []);
+        me.publish("todos/change", JSON.parse(storage.getItem("todos-mu-jquery-app")) || []);
       }
     },
 
-    'on/sync': function ($event, update) {
+    "on/sync": function ($event, update) {
       var me = this
 			var $element = me.$element;
 			var $ = $element.constructor;
       var tasks = $element
         // Find all `li` `.children`
-        .children('li')
+        .children("li")
         // `.map` to JSON
         .map(function (index, task) {
           var $task = $(task);
 
           return {
             title: $task
-              .find('label')
+              .find("label")
               .text(),
             completed: $task
-              .find('.toggle')
-              .prop('checked')
+              .find(".toggle")
+              .prop("checked")
           };
         })
         // Get underlying Array
         .get();
 
       // Publish `todos/change` with the new `tasks`
-      me.publish('todos/change', tasks, !update);
+      me.publish("todos/change", tasks, !update);
     },
 
-    'on/change(.toggle)': function ($event, skip) {
+    "on/change(.toggle)": function ($event, skip) {
 			var $element = this.$element;
 			var $ = $element.constructor;
       var $target = $($event.target);
-      var toggle = $target.prop('checked');
+      var toggle = $target.prop("checked");
 
       // Toggle CSS classes depending on `toggle`
       $target
-        .closest('li')
-        .toggleClass('completed', toggle)
-        .toggleClass('active', !toggle);
+        .closest("li")
+        .toggleClass("completed", toggle)
+        .toggleClass("active", !toggle);
 
       // Trigger `sync` if not `skip`
       if (!skip) {
-        $element.trigger('sync');
+        $element.trigger("sync");
       }
     },
 
-    'on/click(.destroy)': function ($event) {
+    "on/click(.destroy)": function ($event) {
 			var $element = this.$element;
 			var $ = $element.constructor;
 
       // `.remove` `.closest` `li`
       $($event.target)
-        .closest('li')
+        .closest("li")
         .remove();
 
       // Trigger `sync`
-      $element.trigger('sync');
+      $element.trigger("sync");
     },
 
-    'on/doubletap(label)': function ($event) {
+    "on/doubletap(label)": function ($event) {
 			var $ = this.$element.constructor;
       var $target = $($event.target);
 
       $target
         // Add class `editing` to `.closest` `li`,
-        .closest('li')
-        .addClass('editing')
+        .closest("li")
+        .addClass("editing")
         // `.find` `.edit` and update `.val` with `$target.text()`,
-        .find('.edit')
+        .find(".edit")
         .val($target.text())
         // `.focus` to trigger event
         .focus();
     },
 
-    'on/keyup(.edit)': function ($event) {
+    "on/keyup(.edit)": function ($event) {
 			var $ = this.$element.constructor;
       var $target = $($event.target);
 
@@ -191,8 +188,8 @@
           // Restore "task title" `.val` from `label`
           $target.val(function () {
             return $(this)
-              .closest('li')
-              .find('label')
+              .closest("li")
+              .find("label")
               .text();
           });
         // falls through
@@ -204,16 +201,16 @@
       }
     },
 
-    'on/focusout(.edit)': function ($event) {
+    "on/focusout(.edit)": function ($event) {
 			var $ = this.$element.constructor;
 
       // Remove class `editing` from `.closest` `li`
       $($event.target)
-        .closest('li')
-        .removeClass('editing');
+        .closest("li")
+        .removeClass("editing");
     },
 
-    'on/change(.edit)': function ($event) {
+    "on/change(.edit)": function ($event) {
 			var $element = this.$element;
 			var $ = $element.constructor;
       var $target = $($event.target);
@@ -223,22 +220,22 @@
         .trim();
 
       // If `title` is empty find `.closest` `li` ascendant, and `.remove`
-      if (title === '') {
+      if (title === "") {
         $target
-          .closest('li')
+          .closest("li")
           .remove();
       }
       // Otherwise update `val` with trimmed `title`, update `.closest` `li` descendant `label` `.text` with `title`
       else {
         $target
           .val(title)
-          .closest('li')
-          .find('label')
+          .closest("li")
+          .find("label")
           .text(title);
       }
 
       // Trigger `sync`
-      $element.trigger('sync');
+      $element.trigger("sync");
     }
   });
 });
