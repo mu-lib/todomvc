@@ -14,10 +14,9 @@
   "jquery",
   "director",
   "./create",
-  "mu-jquery-widget/widget",
   "mu-jquery-app-hub/widget"
-], this, function ($, Route, create, widget, hub) {
-  return create(widget, hub, {
+], this, function ($, Route, create, widget) {
+  return create(widget, {
     "hub/todos/filter": function (filter) {
       this.$element
         // Find all `a` elements with a `href` attribute staring with `#`
