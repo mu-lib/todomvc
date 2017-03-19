@@ -9,5 +9,5 @@
 		}));
 	}
 })(["./create", "mu-jquery-app-hub/widget"], this, function (create, widget) {
-	return create(widget);
+	return create(widget.concat());
 });
