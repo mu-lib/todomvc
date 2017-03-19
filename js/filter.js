@@ -8,8 +8,8 @@
 			return this[m] || root[m.replace(/^\./, "todos")];
 		}));
 	}
-})(["./create", "mu-jquery-app-hub/widget", "director"], this, function (create, widget, Route) {
-	return create(widget, {
+})(["./widget", "director"], this, function (widget, Route) {
+	return widget.extend({
 		"hub/todos/filter": function (filter) {
 			this.$element
 				// Find all `a` elements with a `href` attribute staring with `#`
