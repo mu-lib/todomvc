@@ -8,10 +8,10 @@
 			return this[m] || root[m.replace(/^\./, "todos")];
 		}));
 	}
-})(["./create", "mu-jquery-app-hub/widget"], this, function (create, widget) {
+})(["./widget"], this, function (widget) {
 	var enter = 13;
 
-	return create(widget, {
+	return widget.extend({
 		"on/keyup": function ($event) {
 			var me = this;
 			var value;
