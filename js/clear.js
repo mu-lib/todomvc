@@ -8,8 +8,8 @@
 			return this[m] || root[m.replace(/^\./, "todos")];
 		}));
 	}
-})(["./create", "mu-jquery-app-hub/widget"], this, function (create, widget) {
-	return create(widget, {
+})(["./widget"], this, function (widget) {
+	return widget.extend({
 		"hub/todos/change": function (tasks) {
 			var count = tasks
 				.filter(function (task) {
