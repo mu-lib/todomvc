@@ -7,18 +7,15 @@
 })(["jquery", "mu-jquery-loom/jquery.loom", "mu-jquery-hub/hub"], this, function (jQuery, loom, hub) {
   var root = this;
 
-  jQuery.fn.loom = loom;
-
   function load(module) {
     return root[module];
   }
 
+  loom.call(jQuery.fn, "[mu-widget]", "mu-widget", load, {
+    "hub": hub.call($, "memory", "stopOnFalse")
+  });
+
   jQuery(function ($) {
-    $(document)
-      .loom("[mu-widget]", "mu-widget", load, {
-        "hub": hub.call($, "memory", "stopOnFalse")
-      })
-      .weave()
-      .fail(console.error.bind(console));
+    $(document).weave().fail(console.error.bind(console));
   });
 });
