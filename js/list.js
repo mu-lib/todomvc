@@ -17,7 +17,6 @@
     "hub/todos/change": function (tasks, skip) {
       var me = this;
 			var $element = me.$element;
-			var $ = $element.constructor;
 
       // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
       storage.setItem("todos-mu-jquery-app", JSON.stringify(tasks));
@@ -27,7 +26,7 @@
         // `empty` element and `.append` the output from `$.map(tasks)`
         $element
           .empty()
-          .append($.map(tasks, function (task) {
+          .append(me.$.map(tasks, function (task) {
             return me.template(task.title, task.completed);
           }));
       }
@@ -43,9 +42,7 @@
     },
 
     "hub/todos/toggle": function (toggle) {
-      var me = this;
-
-      me.$element
+      this.$element
         // Find `.toggle`, set `checked` property to `toggle`
         .find(".toggle")
         .prop("checked", toggle)
@@ -108,9 +105,8 @@
 
     "on/sync": function ($event, update) {
       var me = this
-			var $element = me.$element;
-			var $ = $element.constructor;
-      var tasks = $element
+			var $ = me.$;
+      var tasks = me.$element
         // Find all `li` `.children`
         .children("li")
         // `.map` to JSON
@@ -134,9 +130,8 @@
     },
 
     "on/change(.toggle)": function ($event, skip) {
-			var $element = this.$element;
-			var $ = $element.constructor;
-      var $target = $($event.target);
+      var me = this;
+      var $target = me.$($event.target);
       var toggle = $target.prop("checked");
 
       // Toggle CSS classes depending on `toggle`
@@ -147,26 +142,24 @@
 
       // Trigger `sync` if not `skip`
       if (!skip) {
-        $element.trigger("sync");
+        me.$element.trigger("sync");
       }
     },
 
     "on/click(.destroy)": function ($event) {
-			var $element = this.$element;
-			var $ = $element.constructor;
+      var me = this;
 
       // `.remove` `.closest` `li`
-      $($event.target)
+      me.$($event.target)
         .closest("li")
         .remove();
 
       // Trigger `sync`
-      $element.trigger("sync");
+      me.$element.trigger("sync");
     },
 
     "on/doubletap(label)": function ($event) {
-			var $ = this.$element.constructor;
-      var $target = $($event.target);
+      var $target = this.$($event.target);
 
       $target
         // Add class `editing` to `.closest` `li`,
@@ -180,7 +173,7 @@
     },
 
     "on/keyup(.edit)": function ($event) {
-			var $ = this.$element.constructor;
+			var $ = this.$;
       var $target = $($event.target);
 
       switch ($event.keyCode) {
@@ -202,18 +195,15 @@
     },
 
     "on/focusout(.edit)": function ($event) {
-			var $ = this.$element.constructor;
-
       // Remove class `editing` from `.closest` `li`
-      $($event.target)
+      this.$($event.target)
         .closest("li")
         .removeClass("editing");
     },
 
     "on/change(.edit)": function ($event) {
-			var $element = this.$element;
-			var $ = $element.constructor;
-      var $target = $($event.target);
+      var me = this;
+      var $target = me.$($event.target);
       // Get and `.trim` `.val`
       var title = $target
         .val()
@@ -235,7 +225,7 @@
       }
 
       // Trigger `sync`
-      $element.trigger("sync");
+      me.$element.trigger("sync");
     }
   });
 });
