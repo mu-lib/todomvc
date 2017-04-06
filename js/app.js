@@ -12,7 +12,7 @@
   }
 
   loom.call(jQuery.fn, "[mu-widget]", "mu-widget", load, {
-    "hub": hub.call($, "memory", "stopOnFalse")
+    "hub": hub.call(jQuery, "memory", "stopOnFalse")
   });
 
   jQuery(function ($) {
