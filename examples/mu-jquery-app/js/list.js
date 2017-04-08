@@ -16,7 +16,7 @@
   return widget.extend({
     "hub/todos/change": function (tasks, skip) {
       var me = this;
-			var $element = me.$element;
+      var $element = me.$element;
 
       // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
       storage.setItem("todos-mu-jquery-app", JSON.stringify(tasks));
@@ -72,7 +72,7 @@
 
     "on/initialize": function () {
       var me = this;
-			var $element = me.$element;
+      var $element = me.$element;
 
       // Get detatched `$template` for future usage
       var $template = $element
@@ -105,7 +105,7 @@
 
     "on/sync": function ($event, update) {
       var me = this
-			var $ = me.$;
+      var $ = me.$;
       var tasks = me.$element
         // Find all `li` `.children`
         .children("li")
@@ -173,7 +173,7 @@
     },
 
     "on/keyup(.edit)": function ($event) {
-			var $ = this.$;
+      var $ = this.$;
       var $target = $($event.target);
 
       switch ($event.keyCode) {
