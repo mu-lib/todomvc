@@ -28,7 +28,7 @@
 
 		"on/initialize": function () {
 			var me = this;
-			var $ = me.$element.constructor;
+			var $ = me.$;
 			var routes = {};
 
 			$.each(me.constructor.go, function (index, go) {
