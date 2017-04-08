@@ -3,7 +3,7 @@ node_modules/**
 !node_modules/director/build/director.min.js
 !node_modules/jquery/dist/jquery.min.js
 !node_modules/jquery.finger/dist/jquery.finger.min.js
-!node_modules/mu-jquery-app/dist/all.min.js
+!node_modules/mu-jquery-app/dist/bundle.min.js
 !node_modules/mu-jquery-app-hub/dist/bundle.min.js
 !node_modules/todomvc-app-css/index.css
 !node_modules/todomvc-common/base.css
