@@ -10,16 +10,14 @@
   return widget.extend({
     "hub/todos/change": function (tasks, skip) {
       var me = this;
-      var $element = me.$element;
 
       // Serialize `tasks` to JSON and store in `storage.todos-mu-jquery-app`
       storage.setItem("todos-mu-jquery-app", JSON.stringify(tasks));
 
       // Check if we should skip update
       if (!skip) {
-        // `empty` element and `.append` the output from `$.map(tasks)`
-        $element
-          .empty()
+        // `empty` and `.append` the output from `$.map(tasks)`
+        me.empty()
           .append(me.$.map(tasks, function (task) {
             return me.template(task.title, task.completed);
           }));
@@ -30,36 +28,35 @@
       var me = this;
 
       // Append list from `.template` to `me.$element` and trigger `sync`
-      me.$element
-        .append(me.template(title))
+      me.append(me.template(title))
         .trigger("sync");
     },
 
     "hub/todos/toggle": function (toggle) {
-      this.$element
+      var me = this;
+      me.$element
         // Find `.toggle`, set `checked` property to `toggle`
         .find(".toggle")
         .prop("checked", toggle)
         // Trigger `change` event with `skip`
-        .trigger("change", true)
-        // Backtrack and trigger `sync`
-        .end()
-        .trigger("sync");
+        .trigger("change", true);
+      
+      me.trigger("sync");
     },
 
     "hub/todos/clear": function () {
-      this.$element
+      var me = this;
+      me.$element
         // Find and remove `li:has(.toggle:checked)`
         .find("li:has(.toggle:checked)")
-        .remove()
-        // Backtrack and trigger `sync`
-        .end()
-        .trigger("sync");
+        .remove();
+
+      me.trigger("sync");
     },
 
     "hub/todos/filter": function (filter) {
       // Toggle CSS classes depending on `filter`
-      this.$element
+      this
         .toggleClass("filter-completed", filter === "completed")
         .toggleClass("filter-active", filter === "active");
     },
@@ -89,7 +86,7 @@
 
       // Check if we have data in the DOM to start out with, if so trigger `sync` to persist
       if ($element.children("li").length) {
-        $element.trigger("sync", true);
+        me.trigger("sync", true);
       }
       // Publish `todos/change` with deserialized tasks from `storage.todos-mu-jquery-app` or `[]`
       else {
@@ -136,7 +133,7 @@
 
       // Trigger `sync` if not `skip`
       if (!skip) {
-        me.$element.trigger("sync");
+        me.trigger("sync");
       }
     },
 
@@ -149,7 +146,7 @@
         .remove();
 
       // Trigger `sync`
-      me.$element.trigger("sync");
+      me.trigger("sync");
     },
 
     "on/doubletap(label)": function ($event) {
@@ -219,7 +216,7 @@
       }
 
       // Trigger `sync`
-      me.$element.trigger("sync");
+      me.trigger("sync");
     }
   });
 });

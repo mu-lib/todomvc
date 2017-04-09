@@ -11,7 +11,7 @@
         })
         .length;
 
-      this.$element.html("<strong>" + count + "</strong> " + (count === 1 ? "item" : "items") + " left");
+      this.html("<strong>" + count + "</strong> " + (count === 1 ? "item" : "items") + " left");
     }
   });
 });

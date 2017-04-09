@@ -5,7 +5,7 @@
 })(["./widget"], this, function (widget) {
   return widget.extend({
     "hub/todos/change": function (tasks) {
-      this.$element.prop("checked", tasks.every(function (task) {
+      this.prop("checked", tasks.every(function (task) {
         return task.completed;
       }, true));
     },

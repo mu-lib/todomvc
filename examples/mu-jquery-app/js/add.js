@@ -11,12 +11,12 @@
       var value;
 
       if ($event.keyCode === enter) {
-        value = me.$element
+        value = me
           .val()
           .trim();
 
         if (value !== "") {
-          me.$element.val("");
+          me.val("");
           me.publish("todos/add", value);
         }
       }
